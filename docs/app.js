@@ -248,7 +248,27 @@
     add("Photos and videos", el => {
       const H = get(A, ["H"]); if (!Array.isArray(H.photos)) H.photos = [];
       el.append(h("p", { class: "eyebrow" }, "Yearbook submissions"), h("h2", {}, "Photos and videos"),
-        h("p", { class: "lede" }, "Add as many photos from the last five years with people in this group as you like. You can select lots at once. Year, caption and tags are optional."));
+        h("p", { class: "lede" }, "Start with a baby photo of yourself, then add as many photos from the last five years with people in this group as you like. You can select lots at once. Year, caption and tags are optional."));
+      // Baby photo: one slot, saved apart from the others
+      const babyStatus = h("p", { class: "hint", "aria-live": "polite" }, H.baby && H.baby.path ? "Uploaded." : "");
+      const babyImg = h("img", { class: "thumb", alt: "", hidden: !(H.baby && H.baby.preview) }); if (H.baby && H.baby.preview) babyImg.src = H.baby.preview;
+      const babyInput = h("input", { type: "file", id: "baby-input", accept: "image/*", class: "file" });
+      const babyLabel = h("label", { for: "baby-input", class: "btn add" }, H.baby && H.baby.path ? "Replace baby photo" : "+ Add your baby photo");
+      babyInput.addEventListener("change", async () => {
+        const f = babyInput.files[0]; babyInput.value = ""; if (!f) return;
+        babyStatus.textContent = "Uploading…";
+        try {
+          const { data, preview } = await shrink(f);
+          const id = "baby" + Date.now().toString(36);
+          const res = await post("/media", { id, data });
+          H.baby = { id, path: res.path, preview }; babyImg.src = preview; babyImg.hidden = false;
+          babyStatus.textContent = "Uploaded."; babyLabel.textContent = "Replace baby photo"; save();
+        } catch (e) { babyStatus.textContent = e.message; }
+      });
+      el.append(h("section", { class: "q" }, h("h3", {}, "Your baby photo"),
+        h("p", {}, "One photo of you as a baby or little kid. Keep it to yourself!"),
+        h("div", { class: "photo-head" }, babyImg, h("div", {}, babyLabel, babyInput, babyStatus))));
+      el.append(h("h3", { class: "subhead" }, "Photos with the group"));
       const input = h("input", { type: "file", id: "photos-input", accept: "image/*", multiple: true, class: "file" });
       const count = h("p", { class: "hint count" });
       const list = h("div", { class: "stack-list" });
@@ -351,8 +371,23 @@
     add("Prom Awards", el => {
       const G = get(A, ["G"]);
       el.append(h("p", { class: "eyebrow" }, "Prom Awards"), h("h2", {}, "Yearbook superlatives"),
-        h("p", { class: "lede" }, "Nominate one person for each. The top 3 become finalists on the Prom ballot."));
-      Q.G.forEach(([id, award, ex]) => el.append(q("", award, multiPick(G, id, ex ? players : others, 1))));
+        h("p", { class: "lede" }, "Nominate one person for each. Skip any you can't decide. The top 3 become finalists on the Prom ballot."));
+      const pick = (id, label, pool) => {
+        const fid = `g-${id}`;
+        const s = h("select", { id: fid }, h("option", { value: "" }, "Choose…"), ...pool.map(n => h("option", { value: n, selected: (G[id] || [])[0] === n }, n)));
+        s.addEventListener("change", () => { G[id] = s.value ? [s.value] : []; save(); });
+        return h("div", { class: "field award" }, h("label", { for: fid }, label), s);
+      };
+      const cats = [...new Set(Q.G.map(g => g[3]))];
+      cats.forEach(cat => {
+        const box = h("section", { class: "q" }, h("h3", {}, cat));
+        Q.G.filter(g => g[3] === cat).forEach(([id, award, ex]) => {
+          box.append(pick(id, award, ex ? players : others));
+          if (Q.G_STORY && Q.G_STORY[id]) box.append(textField(get(A, ["G_text"]), id, { label: Q.G_STORY[id], multiline: true, max: 600 }));
+        });
+        if (cat === "Grad school" && Q.SUPERVISORS && Q.SUPERVISORS.length) box.append(pick("G22", "Most Eccentric Supervisor (if they win, their student shares their best story at Prom)", [...Q.SUPERVISORS].sort((a, b) => a.localeCompare(b))));
+        el.append(box);
+      });
     });
   }
 
@@ -368,6 +403,7 @@
         const submittedAt = new Date().toISOString();
         const clean = JSON.parse(JSON.stringify(A));
         if (clean.H?.photos) clean.H.photos = clean.H.photos.filter(p => p && p.path).map(({ preview, error, ...p }) => p);
+        if (clean.H?.baby) delete clean.H.baby.preview;
         if (clean.H?.quotes) clean.H.quotes = clean.H.quotes.filter(q => q && (q.text || "").trim());
         await post("/submit", { answers: clean, meta: { startedAt: state.startedAt, submittedAt, version: VERSION } });
         state.submittedAt = submittedAt; save();

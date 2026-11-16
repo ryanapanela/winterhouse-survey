@@ -90,7 +90,6 @@ window.Q = {
     ["D09", "Who would you go to for a hype-up before a big talk?", 1, false],
     ["D10", "Who are you suspicious of before the game even starts?", 2, true],
     ["D11", "If you were a Traitor, who would you want as your fellow Traitor?", 1, true],
-    ["D12", "Who's most likely to win Traitors?", 1, true],
     ["D13", "Who will surprise everyone this weekend?", 1, false],
   ],
 
@@ -98,21 +97,40 @@ window.Q = {
   E: [
     ["E01", "Which pairs in the group are closest?", "pair", 3, false],
     ["E02", "Unexpected Pairing, the classic: which pair gets along far better than anyone would have guessed?", "pair", 2, false],
-    ["E03", "Unexpected Pairing we need to see: which two people have barely hung out but would be great together?", "pair", 2, false],
+    ["E03", "Unexpected Pairing you hope to see this weekend: which two people do you think would be great together?", "pair", 2, false],
     ["E04", "Which pair is most alike?", "pair", 1, false],
     ["E05", "Which pair is most opposite but still gets along?", "pair", 1, false],
     ["E06", "Which pair would make the best secret Traitor duo?", "pair", 1, true],
     ["E07", "Which pair would you most want to watch do a confessional together?", "pair", 1, false],
-    ["E08", "Who is the glue of this group?", "person", 1, false],
-    ["E09", "Who will be at the centre of the network map?", "person", 1, false],
+    ["E10", "Who in this group has grown the most over the last five years?", "person", 1, false],
   ],
 
-  // Section G: [id, award, excludeHost]
+  // Section G: Prom Awards. [id, award, excludeHost, category]. Ids are fixed: never reuse one.
   G: [
-    ["G01", "Most Likely to Become a Prof", false],
-    ["G02", "Most Likely to Still Be Writing Their Thesis", false],
-    ["G03", "Best Conference Story", false],
-    ["G04", "Class Clown", false],
-    ["G05", "Most Likely to Be a Traitor", true],
+    ["G01", "Most Likely to Become a Prof", false, "Grad school"],
+    ["G14", "Worst Case of Senioritis", false, "Grad school"],
+    ["G22", "Whose Supervisor Is the Most Eccentric? (if they win, you share your best story at Prom)", false, "Grad school"],
+    ["G06", "Best Smile", false, "Looks and talents"],
+    ["G07", "Best Hair", false, "Looks and talents"],
+    ["G08", "Best Laugh", false, "Looks and talents"],
+    ["G09", "Best Dressed (Everyday)", false, "Looks and talents"],
+    ["G10", "Most Photogenic", false, "Looks and talents"],
+    ["G11", "Most Athletic", false, "Looks and talents"],
+    ["G12", "Most Artistic", false, "Looks and talents"],
+    ["G04", "Class Clown", false, "Social"],
+    ["G13", "Social Butterfly", false, "Social"],
+    ["G15", "Biggest Flirt", false, "Social"],
+    ["G16", "Most Likely to Become a Reality Star", false, "Social"],
+    ["G17", "Most Likely to Get Married Next", false, "Social"],
+    ["G23", "Most Likely to Win a German Drinking Game", false, "Social"],
+    ["G18", "Worst Driver", false, "Infamous"],
+    ["G19", "Worst Aux Cord Privileges", false, "Infamous"],
+    ["G20", "Most Tardy", false, "Infamous"],
+    ["G21", "Most Sneaky / Best Deceiver", false, "Infamous"],
+    ["G24", "Most Controversial", false, "Infamous"],
   ],
+  // Awards with a story box under the pick.
+  G_STORY: {},
+  // Supervisor names were removed; G22 is now a pick of the student instead.
+  SUPERVISORS: [],
 };

@@ -10,7 +10,7 @@ Writes (long format, one row per answer):
   nominations.csv   rater, question, target        (D and G, plus E person questions)
   pairs.csv         rater, question, a, b          (E pair questions)
   submissions.csv   person, part, submitted_at, opt_in
-Text answers (quotes, F1–F3, photo captions) are left in the JSON on purpose:
+Text answers (quotes, F1–F3, photo captions, award stories in G_text) are left in the JSON on purpose:
 read them by hand only where you planned to.
 """
 import csv, glob, json, os, sys
@@ -52,8 +52,9 @@ for part in (1, 2):
                     T["predictions"].append([me, t, item, v])
         for sec in ["D", "G"]:
             for qid, picks in (a.get(sec) or {}).items():
-                for t in picks or []:
-                    T["nominations"].append([me, qid, t])
+                if not isinstance(picks, list): continue
+                for t in picks:
+                    if t: T["nominations"].append([me, qid, t])
         for qid, v in (a.get("E") or {}).items():
             for x in v or []:
                 if isinstance(x, list):

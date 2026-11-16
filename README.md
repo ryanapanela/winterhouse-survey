@@ -58,10 +58,27 @@ The site can't write to GitHub directly. That would put a write token in public 
 ## Analysis
 
 ```
-git clone git@github.com:<you>/winterhouse-data.git
-python3 tools/flatten.py winterhouse-data          # writes winterhouse-data/tidy/*.csv
+git clone https://github.com/ryanapanela/winterhouse-data.git      # first time; later: git pull
+python3 tools/flatten.py winterhouse-data                          # → winterhouse-data/tidy/*.csv
+python3 tools/analyze.py winterhouse-data/tidy                     # → winterhouse-data/analysis/
 ```
-This produces tidy long-format CSVs: `alignment`, `dyads` (ios, time, trust, metaTrust, history), `words`, `predictions`, `nominations`, `pairs` and `submissions`. Text answers (quotes, F1–F3, captions) stay in the JSON.
+`flatten.py` writes tidy long-format CSVs: `alignment`, `dyads` (ios, time, trust, metaTrust, history), `words`, `predictions`, `nominations`, `pairs` and `submissions`. Text answers (quotes, F1–F3, captions) stay in the JSON.
+
+`analyze.py` builds the multilayer network and writes:
+- `results.json`: everything the reveal needs. That covers the layer maps; roles, circles and centrality; layer agreement; power duos; Unexpected Pairings with introducers; mismatches; prediction scores, readability and duels; words and Traitor vibe; trust gaps and one-sided alliances; group-view guessing; Prom Award finalists; and hot-take splits.
+- `pairs.csv`: all 120 pairs with every facet and layer percentile.
+- `people.csv`: one row per person.
+
+The network combines six layers: connection, alignment, knowing, trust, perception and suspicion. Each pair's tie is the weighted mean of the layer percentiles that are switched on (equal weights by default, set in `LAYER_WEIGHTS`). Connection uses only what the two people report (closeness 40%, time 35%, support 25%); E1 lives in the perception layer, so nothing is counted twice. Suspicion is an optional penalty. Hubs, circles and roles come from that combined network, and `results.json` includes all 62 on/off combinations so the reveal can toggle layers live. To change the default, edit `DEFAULT_ON` in `analyze.py`. The field guide (`analysis-field-guide.html`, one folder up) explains each step.
+
+To test the whole chain without real data:
+```
+python3 tools/simulate_responses.py sim-data
+python3 tools/flatten.py sim-data && python3 tools/analyze.py sim-data/tidy
+```
+The simulation's friend groups are random, and `analyze.py` reports how well it recovered them.
+
+Needs Python with pandas, numpy, scipy, networkx and scikit-learn (all included in Anaconda).
 
 ## Editing questions
 
