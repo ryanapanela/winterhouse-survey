@@ -44,9 +44,10 @@ json.dump(hashes, open(os.path.join(priv, "worker_TOKENS.json"), "w"))
 site = a.site if a.site.endswith("/") else a.site + "/"
 with open(os.path.join(priv, "links.csv"), "w", newline="") as f:
     w = csv.writer(f)
-    w.writerow(["name", "part1_link", "part2_link"])
+    w.writerow(["name", "part1_link", "part2_link", "pilot_part1_link", "pilot_part2_link"])
     for n in pdz.NAMES:
-        w.writerow([n] + [site + "?" + urlencode({"me": n, "k": codes[n], "part": p}) for p in (1, 2)])
+        real = [site + "?" + urlencode({"me": n, "k": codes[n], "part": p}) for p in (1, 2)]
+        w.writerow([n] + real + [u + "&pilot=1" for u in real])
 
 cfg = {
     "endpoint": a.endpoint.rstrip("/"),

@@ -159,3 +159,4 @@ textarea { resize: vertical; }
 .photo-head > .photo-fields { align-items: stretch; }
 .restored { background: var(--tree-soft); color: var(--tree); font-weight: 600; font-size: 15px; padding: 12px 14px; border-radius: 12px; max-width: none; }
 .screen:focus, .screen:focus-visible { outline: none; }
+.pilot-band { background: var(--lights-soft); color: var(--lights); font-size: 13px; font-weight: 600; text-align: center; padding: 6px 16px; }

@@ -5,6 +5,7 @@
   const params = new URLSearchParams(location.search);
   const me = params.get("me"), key = params.get("k");
   const part = params.get("part") === "2" ? 2 : 1;
+  const pilot = params.get("pilot") === "1";
   const VERSION = "2026-11-15";
 
   // ---------- utilities ----------
@@ -42,7 +43,7 @@
   const isHost = me === C.host;
 
   // ---------- state ----------
-  const SKEY = `winterhouse:${me}:part${part}`;
+  const SKEY = `winterhouse:${pilot ? "pilot:" : ""}${me}:part${part}`;
   let state;
   try { state = JSON.parse(localStorage.getItem(SKEY)); } catch { state = null; }
   const freshDevice = !state || typeof state !== "object";
@@ -130,7 +131,7 @@
   // ---------- network ----------
   async function post(path, body) {
     if (!C.endpoint) throw new Error("The survey isn't connected yet. Tell Ryan.");
-    const r = await fetch(C.endpoint.replace(/\/$/, "") + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ me, k: key, part, ...body }) });
+    const r = await fetch(C.endpoint.replace(/\/$/, "") + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ me, k: key, part, pilot, ...body }) });
     let data = {}; try { data = await r.json(); } catch {}
     if (!r.ok) throw new Error(data.error || `Couldn't save (error ${r.status}). Try again in a minute.`);
     return data;
@@ -381,7 +382,8 @@
   // ---------- shell ----------
   const bar = h("div", { class: "bar" }, h("div", { class: "fill" }));
   const crumb = h("span", { class: "crumb" });
-  const header = h("header", { class: "top" }, h("div", { class: "top-inner" }, h("span", { class: "brand" }, "Winterhouse"), crumb), bar);
+  const header = h("header", { class: "top" }, h("div", { class: "top-inner" }, h("span", { class: "brand" }, "Winterhouse"), crumb), bar,
+    pilot ? h("div", { class: "pilot-band" }, "Pilot run: answers save to a separate test folder") : null);
   const main = h("main", { class: "screen", tabindex: "-1" });
   const back = h("button", { type: "button", class: "btn ghost", onclick: () => go(-1) }, "Back");
   const next = h("button", { type: "button", class: "btn primary", onclick: () => go(1) }, "Next");

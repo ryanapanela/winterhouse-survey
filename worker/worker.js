@@ -79,19 +79,20 @@ export default {
     if (typeof me !== "string" || typeof k !== "string" || !tokens[me] || (await sha256hex(k)) !== tokens[me])
       return json({ error: "This link isn't recognised. Use the personal link Ryan sent you." }, 403, headers);
     if (part !== 1 && part !== 2) return json({ error: "Bad request" }, 400, headers);
+    const base = body.pilot === true ? "pilot/" : "";   // pilot links save to a separate folder
     if (route !== "/load" && env.CLOSES_AT && Date.now() > Date.parse(env.CLOSES_AT))
       return json({ error: "The survey has closed. Message Ryan if you still need to send something." }, 403, headers);
 
     try {
       if (route === "/submit") {
-        const text = JSON.stringify({ me, part, answers: body.answers, meta: { ...(body.meta || {}), receivedAt: new Date().toISOString() } }, null, 1);
+        const text = JSON.stringify({ me, part, pilot: !!base, answers: body.answers, meta: { ...(body.meta || {}), receivedAt: new Date().toISOString() } }, null, 1);
         if (text.length > MAX_JSON) return json({ error: "That's too much text to save. Shorten a long answer and try again." }, 413, headers);
-        const path = `responses/part${part}/${slug(me)}.json`;
-        await putFile(env, path, b64(enc.encode(text)), `Part ${part}: ${me}`);
+        const path = `${base}responses/part${part}/${slug(me)}.json`;
+        await putFile(env, path, b64(enc.encode(text)), `${base ? "Pilot " : ""}Part ${part}: ${me}`);
         return json({ ok: true, path }, 200, headers);
       }
       if (route === "/load") {
-        const path = `responses/part${part}/${slug(me)}.json`;
+        const path = `${base}responses/part${part}/${slug(me)}.json`;
         const r = await gh(env, `${path}?ref=${env.BRANCH || "main"}`);
         if (r.status === 404) return json({ found: false }, 200, headers);
         if (!r.ok) throw new Error(`GitHub read failed (${r.status})`);
@@ -105,8 +106,8 @@ export default {
         if (!/^[a-z0-9]{6,32}$/.test(id) || typeof body.data !== "string") return json({ error: "Bad request" }, 400, headers);
         if (body.data.length > MAX_PHOTO_B64) return json({ error: "That photo is too large. Try a smaller one." }, 413, headers);
         if (!/^[A-Za-z0-9+/=]+$/.test(body.data.slice(0, 2000))) return json({ error: "Bad image data" }, 400, headers);
-        const path = `media/${slug(me)}/${id}.jpg`;
-        await putFile(env, path, body.data, `Photo: ${me}`);
+        const path = `${base}media/${slug(me)}/${id}.jpg`;
+        await putFile(env, path, body.data, `${base ? "Pilot photo" : "Photo"}: ${me}`);
         return json({ ok: true, path }, 200, headers);
       }
       return json({ error: "Not found" }, 404, headers);

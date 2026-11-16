@@ -44,6 +44,10 @@ The site can't write to GitHub directly. That would put a write token in public 
 6. **Test with your own links** from `private/links.csv`. A file should appear in `winterhouse-data/responses/` within a few seconds.
 7. **Send links by DM:** Part 1 on Mon Nov 16, Part 2 on Thu Nov 19. The relay refuses submissions after `CLOSES_AT` (Sun Nov 22, midnight Toronto).
 
+## Piloting
+
+`private/links.csv` also has `pilot_part1_link` and `pilot_part2_link` columns: the same links with `&pilot=1`. They show a "Pilot run" band, and save to `pilot/responses/…` and `pilot/media/…` in the data repo, never mixed with real answers. To analyse pilot data: `python3 tools/flatten.py winterhouse-data/pilot`.
+
 ## Day to day
 
 - People can reopen their link and resubmit. The newest version replaces the old one, and git history keeps the old ones.
