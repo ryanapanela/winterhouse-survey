@@ -1,0 +1,118 @@
+// All survey wording lives here. Edit freely; ids are what end up in the data.
+window.Q = {
+  likert: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"],
+
+  // Section B. block = prediction-game block (A–D) or null.
+  B: [
+    { group: "Values and life", items: [
+      ["B01", "Honesty beats kindness when the two conflict.", "A"],
+      ["B02", "Work-life balance matters more to me than moving fast in my career.", null],
+      ["B03", "I'd move countries for the right job.", "B"],
+      ["B04", "Money matters more to me than I usually admit.", "C"],
+      ["B05", "I believe things happen for a reason.", null],
+      ["B06", "I'd rather be respected than liked.", "D"],
+      ["B07", "Ambition is one of my defining traits.", null],
+      ["B08", "I could lie convincingly to this group for four days.", null],
+    ]},
+    { group: "Friendship and conflict", items: [
+      ["B09", "I'd tell a friend if I thought their partner was bad news.", "A"],
+      ["B10", "Gossip brings people closer.", "B"],
+      ["B11", "I hold grudges.", "C"],
+      ["B12", "Texting back quickly is a sign of respect.", null],
+      ["B13", "I'd rather deal with a conflict right away than let it cool off.", "D"],
+      ["B14", "Splitting the bill evenly is fair, whatever people ordered.", null],
+      ["B15", "Group chats should have rules.", null],
+      ["B16", "Being late is disrespectful.", null],
+    ]},
+    { group: "Social style", items: [
+      ["B17", "I recharge best alone.", "A"],
+      ["B18", "I'm usually the one who plans the group hangout.", null],
+      ["B19", "I'm easily embarrassed.", "B"],
+      ["B20", "I'd sing karaoke completely sober.", "C"],
+      ["B21", "I'm a better listener than talker.", null],
+      ["B22", "I care what strangers think of me.", null],
+      ["B23", "I cry at movies.", "D"],
+    ]},
+    { group: "Grad school", items: [
+      ["B24", "Academia is worth it.", "A"],
+      ["B25", "I'll stay in research after the PhD.", "B"],
+      ["B26", "Reviewer 2 is usually right.", "C"],
+      ["B27", "I do my best work at the last minute.", "D"],
+      ["B28", "I'd pick a famous lab over a kind supervisor.", null],
+      ["B29", "Conferences are mostly about the socials.", null],
+      ["B30", "I could explain my thesis to a 10-year-old.", null],
+    ]},
+  ],
+  // this-or-that: [id, optionA, optionB, block]
+  TOT: [
+    ["B31", "Plan the trip", "Wing it", "A"],
+    ["B32", "Host", "Be hosted", null],
+    ["B33", "Morning person", "Night person", "B"],
+    ["B34", "Dogs", "Cats", null],
+    ["B35", "Board games are ruthless", "Board games are friendly", "C"],
+    ["B36", "Comfortable silence in the car", "Keep the conversation going", null],
+    ["B37", "Big group dinner", "Deep one-on-one", "D"],
+    ["B38", "Reality TV is a guilty pleasure", "Reality TV is high art", null],
+    ["B39", "Text", "Call", null],
+    ["B40", "Lake swim", "Hot tub", null],
+    ["B41", "Spoilers don't bother me", "Spoilers ruin everything", null],
+    ["B42", "I'd rather be a Traitor", "I'd rather be a Faithful", "A"],
+    ["B43", "Sweet", "Savoury", "B"],
+    ["B44", "Cook", "Clean up", null],
+    ["B45", "Mountains", "Beach", null],
+    ["B46", "Early to the party", "Fashionably late", "C"],
+    ["B47", "Know the future", "Change the past", null],
+    ["B48", "Head, for big decisions", "Heart, for big decisions", "D"],
+    ["B49", "Be famous", "Be powerful", null],
+    ["B50", "Read the whole group chat", "Skim and react", null],
+  ],
+
+  // Section A word list. Coding is for analysis only; people see one shuffled list.
+  WORDS: {
+    faithful: ["Loyal", "Honest", "Reliable", "Warm", "Generous", "Open"],
+    traitor: ["Strategic", "Mysterious", "Persuasive", "Observant", "Sharp", "Unpredictable"],
+    fun: ["Hilarious", "Chaotic", "Dramatic", "Spontaneous", "Sarcastic", "Bold"],
+    steady: ["Calm", "Thoughtful", "Grounded", "Organized", "Curious", "Diplomatic"],
+  },
+  SHARED_TIME: ["Not at all", "Once or twice", "About monthly", "A few times a month", "Weekly or more"],
+  HISTORY: ["Under 6 months", "6–12 months", "1–2 years", "2–5 years", "5+ years"],
+
+  // Section D: [id, question, max picks, excludeHost]
+  D: [
+    ["D01", "If something went wrong at 2am, who here would you call?", 3, false],
+    ["D02", "Who do you go to for advice on research or career decisions?", 2, false],
+    ["D03", "Who would you trust with a secret?", 2, false],
+    ["D04", "Who here understands you best?", 1, false],
+    ["D05", "Who would you like to get to know better?", 3, false],
+    ["D06", "Who makes you laugh the most?", 2, false],
+    ["D07", "Who would you want on your team for a mission?", 2, false],
+    ["D08", "Who would you want next to you on a 5-hour drive?", 1, false],
+    ["D09", "Who would you go to for a hype-up before a big talk?", 1, false],
+    ["D10", "Who are you suspicious of before the game even starts?", 2, true],
+    ["D11", "If you were a Traitor, who would you want as your fellow Traitor?", 1, true],
+    ["D12", "Who's most likely to win Traitors?", 1, true],
+    ["D13", "Who will surprise everyone this weekend?", 1, false],
+  ],
+
+  // Section E: [id, question, kind, count, excludeHost]
+  E: [
+    ["E01", "Which pairs in the group are closest?", "pair", 3, false],
+    ["E02", "Unexpected Pairing, the classic: which pair gets along far better than anyone would have guessed?", "pair", 2, false],
+    ["E03", "Unexpected Pairing we need to see: which two people have barely hung out but would be great together?", "pair", 2, false],
+    ["E04", "Which pair is most alike?", "pair", 1, false],
+    ["E05", "Which pair is most opposite but still gets along?", "pair", 1, false],
+    ["E06", "Which pair would make the best secret Traitor duo?", "pair", 1, true],
+    ["E07", "Which pair would you most want to watch do a confessional together?", "pair", 1, false],
+    ["E08", "Who is the glue of this group?", "person", 1, false],
+    ["E09", "Who will be at the centre of the network map?", "person", 1, false],
+  ],
+
+  // Section G: [id, award, excludeHost]
+  G: [
+    ["G01", "Most Likely to Become a Prof", false],
+    ["G02", "Most Likely to Still Be Writing Their Thesis", false],
+    ["G03", "Best Conference Story", false],
+    ["G04", "Class Clown", false],
+    ["G05", "Most Likely to Be a Traitor", true],
+  ],
+};

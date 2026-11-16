@@ -1,0 +1,10 @@
+name = "winterhouse-survey"
+main = "worker.js"
+compatibility_date = "2024-09-23"
+
+[vars]
+REPO = "ryanapanela/winterhouse-data"
+ALLOWED_ORIGIN = "https://ryanapanela.github.io"
+CLOSES_AT = "2026-11-23T05:00:00Z"   # Sun Nov 22, midnight Toronto
+BRANCH = "main"
+# Secrets, set with:  npx wrangler secret put GITHUB_TOKEN   and   npx wrangler secret put TOKENS
