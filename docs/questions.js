@@ -128,6 +128,16 @@ window.Q = {
     ["G20", "Most Tardy", false, "Infamous"],
     ["G21", "Most Sneaky / Best Deceiver", false, "Infamous"],
     ["G24", "Most Controversial", false, "Infamous"],
+    ["G25", "Most Likely to Have an OnlyFans", false, "Infamous"],
+    ["G26", "Most Likely to Go to Jail for White-Collar Crime", false, "Infamous"],
+  ],
+  // Part 1 "All about you": short answers for yearbook profiles and "whose answer is this?" games.
+  ABOUT: [
+    ["P1", "What's your favourite song of 2026?", "Song and artist"],
+    ["P2", "Who is your celebrity crush?", ""],
+    ["P3", "What is your guilty pleasure?", ""],
+    ["P4", "What's your go-to karaoke song?", ""],
+    ["P5", "What show do you rewatch when you need comfort?", ""],
   ],
   // Awards with a story box under the pick.
   G_STORY: {},

@@ -338,5 +338,15 @@ G_QS = [
   "Most Controversial",
   False
  ],
+ [
+  "G25",
+  "Most Likely to Have an OnlyFans",
+  False
+ ],
+ [
+  "G26",
+  "Most Likely to Go to Jail for White-Collar Crime",
+  False
+ ],
 ]
 SUPPORT_QS = ["D01", "D02", "D03", "D04"]

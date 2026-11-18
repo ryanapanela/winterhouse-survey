@@ -239,6 +239,12 @@
       draw();
       el.append(list, h("button", { type: "button", class: "btn add", onclick: () => { H.quotes.push({}); save(); draw(); list.lastChild.querySelector("textarea").focus(); } }, "+ Add another quote"));
     });
+    add("All about you", el => {
+      const P = get(A, ["P"]);
+      el.append(h("p", { class: "eyebrow" }, "Yearbook profile"), h("h2", {}, "All about you"),
+        h("p", { class: "lede" }, "Short answers for your yearbook page. Skip any you like."),
+        ...Q.ABOUT.map(([id, text, ph]) => q(id, text, textField(P, id, { placeholder: ph, max: 160 }))));
+    });
     add("Your favourite quote", el => {
       const H = get(A, ["H"]);
       el.append(h("p", { class: "eyebrow" }, "Yearbook submissions"), h("h2", {}, "Your favourite quote"),
@@ -295,7 +301,7 @@
     add("Off the record", el => {
       const F = get(A, ["F"]);
       el.append(h("p", { class: "eyebrow" }, "Off the record"), h("h2", {}, "Three last things"),
-        q("F1", "Tell us one thing about you that nobody here knows.", h("p", { class: "hint" }, "Used anonymously in a \"who wrote this?\" game."), textField(F, "F1", { multiline: true })),
+        q("F1", "What is a fun fact about yourself that not many people know?", h("p", { class: "hint" }, "3 sentences max. Used anonymously in a \"who wrote this?\" game."), textField(F, "F1", { multiline: true, max: 400 })),
         q("F2", "Is there anything you'd like to get out of this weekend?", h("p", { class: "hint" }, "Optional. Goes to Ryan so he can plan around it."), textField(F, "F2", { multiline: true })),
         q("F3", "Anything you'd rather we not bring up this weekend?", h("p", { class: "hint" }, "Optional. Only Ryan sees it, and it keeps games and quotes off that topic."), textField(F, "F3", { multiline: true })));
     });

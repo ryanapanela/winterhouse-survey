@@ -10,7 +10,7 @@ Writes (long format, one row per answer):
   nominations.csv   rater, question, target        (D and G, plus E person questions)
   pairs.csv         rater, question, a, b          (E pair questions)
   submissions.csv   person, part, submitted_at, opt_in
-Text answers (quotes, F1–F3, photo captions, award stories in G_text) are left in the JSON on purpose:
+Text answers (quotes, P1–P5 "All about you", F1–F3, photo captions, award stories in G_text) are left in the JSON on purpose:
 read them by hand only where you planned to.
 """
 import csv, glob, json, os, sys
