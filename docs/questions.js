@@ -142,6 +142,7 @@ window.Q = {
     ["P3", "What is your guilty pleasure?", ""],
     ["P4", "What's your go-to karaoke song?", ""],
     ["P5", "What show do you rewatch when you need comfort?", ""],
+    ["P8", "If you could live anywhere in the world, where would it be?", "City, country"],
   ],
   // Picks about things happening at the cottage: people who can't come (config "away") are left out of these.
   WEEKEND_ONLY: ["D13", "E03", "E07"],
