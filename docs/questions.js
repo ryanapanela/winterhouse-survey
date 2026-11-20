@@ -57,7 +57,7 @@ window.Q = {
     ["B39", "Text", "Call", null],
     ["B40", "Lake swim", "Hot tub", null],
     ["B41", "Spoilers don't bother me", "Spoilers ruin everything", null],
-    ["B42", "I'd rather be a Traitor", "I'd rather be a Faithful", "A"],
+    ["B53", "Night in", "Night out", "A"],
     ["B43", "Sweet", "Savoury", "B"],
     ["B44", "Cook", "Clean up", null],
     ["B45", "Mountains", "Beach", null],

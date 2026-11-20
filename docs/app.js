@@ -253,9 +253,9 @@
         h("p", { class: "lede" }, "Short answers for your yearbook page. Skip any you like."),
         ...Q.ABOUT.map(([id, text, ph]) => q(id, text, textField(P, id, { placeholder: ph, max: 160 }))));
     });
-    add("Your favourite quote", el => {
+    add("A quote you live by", el => {
       const H = get(A, ["H"]);
-      el.append(h("p", { class: "eyebrow" }, "Yearbook submissions"), h("h2", {}, "Your favourite quote"),
+      el.append(h("p", { class: "eyebrow" }, "Yearbook submissions"), h("h2", {}, "A quote you live by"),
         h("p", { class: "lede" }, "From anywhere: a book, a film, a song, a professor, your mum. Don't say who said it, or that it's yours."),
         textField(H, "fav", { multiline: true, placeholder: "\u201c\u2026\u201d", max: 400 }));
     });
