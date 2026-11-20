@@ -220,7 +220,7 @@
       el.append(h("p", { class: "eyebrow" }, `Where you stand · ${gi + 1} of 6`), h("h2", {}, g.group), h("p", { class: "lede" }, "How much do you agree?"));
       g.items.forEach(([id, text]) => el.append(q(id.slice(1).replace(/^0/, ""), text, likert(B(), id))));
     }));
-    [[0, 10], [10, 20]].forEach(([s, e], k) => add("This or that", el => {
+    [[0, 10], [10, Q.TOT.length]].forEach(([s, e], k) => add("This or that", el => {
       el.append(h("p", { class: "eyebrow" }, `Where you stand · ${5 + k} of 6`), h("h2", {}, "This or that"), h("p", { class: "lede" }, "Go with your gut."));
       Q.TOT.slice(s, e).forEach(([id, a, b]) => el.append(q(id.slice(1), "", tot(B(), id, a, b))));
     }));

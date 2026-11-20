@@ -41,8 +41,8 @@ sig = lambda x: 1 / (1 + np.exp(-x))
 
 # answers to the 50 items: traits shared within circles
 traits = R.normal(0, 1, (N, 5)) + .5 * (circ @ R.normal(0, 1, (3, 5)))
-load = R.normal(0, .8, (5, 50))
-raw = traits @ load / 2.2 + R.normal(0, .7, (N, 50))
+load = R.normal(0, .8, (5, len(LIKERT_IDS + TOT_IDS)))
+raw = traits @ load / 2.2 + R.normal(0, .7, (N, len(LIKERT_IDS + TOT_IDS)))
 B = []
 for i in range(N):
     ans = {}

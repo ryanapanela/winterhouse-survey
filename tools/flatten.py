@@ -3,7 +3,7 @@
 Usage:  python3 tools/flatten.py path/to/winterhouse-data  [out_dir]
 
 Writes (long format, one row per answer):
-  alignment.csv     person, item, value            (B01–B30 as 1–5, B31–B50 as a/b)
+  alignment.csv     person, item, value            (B01–B30 as 1–5, B31–B51 as a/b)
   dyads.csv         rater, target, measure, value  (ios, time, trust, metaTrust, unknown, history)
   words.csv         rater, target, kind, word      (kind = words | meta | self)
   predictions.csv   predictor, target, item, guess

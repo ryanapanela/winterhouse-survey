@@ -6,7 +6,7 @@ a word, or a block letter there, change it here too.
 HOST = "Ryan"  # hosts Traitors, so he is never a target of Traitors questions
 
 LIKERT_IDS = ["B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B09", "B10", "B11", "B12", "B13", "B14", "B15", "B16", "B17", "B18", "B19", "B20", "B21", "B22", "B23", "B24", "B25", "B26", "B27", "B28", "B29", "B30"]
-TOT_IDS = ["B31", "B32", "B33", "B34", "B35", "B36", "B37", "B38", "B39", "B40", "B41", "B42", "B43", "B44", "B45", "B46", "B47", "B48", "B49", "B50"]
+TOT_IDS = ["B31", "B32", "B33", "B34", "B35", "B36", "B37", "B38", "B39", "B40", "B41", "B42", "B43", "B44", "B45", "B46", "B47", "B48", "B49", "B50", "B51"]
 ITEM_TEXT = {
  "B01": "Honesty beats kindness when the two conflict.",
  "B02": "Work-life balance matters more to me than moving fast in my career.",
@@ -57,7 +57,8 @@ ITEM_TEXT = {
  "B47": "Know the future · Change the past",
  "B48": "Head, for big decisions · Heart, for big decisions",
  "B49": "Be famous · Be powerful",
- "B50": "Read the whole group chat · Skim and react"
+ "B50": "Read the whole group chat · Skim and react",
+ "B51": "Pho · Ramen"
 }
 BLOCKS = {"A": ["B01", "B09", "B17", "B24", "B31", "B42"], "B": ["B03", "B10", "B19", "B25", "B33", "B43"], "C": ["B04", "B11", "B20", "B26", "B35", "B46"], "D": ["B06", "B13", "B23", "B27", "B37", "B48"]}  # prediction-game item blocks
 
@@ -244,6 +245,11 @@ G_QS = [
   False
  ],
  [
+  "G27",
+  "Teacher's Pet",
+  False
+ ],
+ [
   "G22",
   "Whose Supervisor Is the Most Eccentric?",
   False
@@ -281,6 +287,11 @@ G_QS = [
  [
   "G12",
   "Most Artistic",
+  False
+ ],
+ [
+  "G28",
+  "Most Secret Talents",
   False
  ],
  [
@@ -346,6 +357,21 @@ G_QS = [
  [
   "G26",
   "Most Likely to Go to Jail for White-Collar Crime",
+  False
+ ],
+ [
+  "G29",
+  "Most Likely to Leave the Country and Never Be Seen Again",
+  False
+ ],
+ [
+  "G30",
+  "Most Likely to Marry for a Visa",
+  False
+ ],
+ [
+  "G31",
+  "Most Likely to Live a Double Life",
   False
  ],
 ]

@@ -65,6 +65,7 @@ window.Q = {
     ["B48", "Head, for big decisions", "Heart, for big decisions", "D"],
     ["B49", "Be famous", "Be powerful", null],
     ["B50", "Read the whole group chat", "Skim and react", null],
+    ["B51", "Pho", "Ramen", null],
   ],
 
   // Section A word list. Coding is for analysis only; people see one shuffled list.
@@ -109,6 +110,7 @@ window.Q = {
   G: [
     ["G01", "Most Likely to Become a Prof", false, "Grad school"],
     ["G14", "Worst Case of Senioritis", false, "Grad school"],
+    ["G27", "Teacher's Pet", false, "Grad school"],
     ["G22", "Whose Supervisor Is the Most Eccentric? (if they win, you share your best story at Prom)", false, "Grad school"],
     ["G06", "Best Smile", false, "Looks and talents"],
     ["G07", "Best Hair", false, "Looks and talents"],
@@ -117,6 +119,7 @@ window.Q = {
     ["G10", "Most Photogenic", false, "Looks and talents"],
     ["G11", "Most Athletic", false, "Looks and talents"],
     ["G12", "Most Artistic", false, "Looks and talents"],
+    ["G28", "Most Secret Talents", false, "Looks and talents"],
     ["G04", "Class Clown", false, "Social"],
     ["G13", "Social Butterfly", false, "Social"],
     ["G15", "Biggest Flirt", false, "Social"],
@@ -130,6 +133,9 @@ window.Q = {
     ["G24", "Most Controversial", false, "Infamous"],
     ["G25", "Most Likely to Have an OnlyFans", false, "Infamous"],
     ["G26", "Most Likely to Go to Jail for White-Collar Crime", false, "Infamous"],
+    ["G29", "Most Likely to Leave the Country and Never Be Seen Again", false, "Infamous"],
+    ["G30", "Most Likely to Marry for a Visa", false, "Infamous"],
+    ["G31", "Most Likely to Live a Double Life", false, "Infamous"],
   ],
   // Part 1 "All about you": short answers for yearbook profiles and "whose answer is this?" games.
   ABOUT: [
