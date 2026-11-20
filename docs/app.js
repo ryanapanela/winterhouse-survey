@@ -251,7 +251,7 @@
       const P = get(A, ["P"]);
       el.append(h("p", { class: "eyebrow" }, "Yearbook profile"), h("h2", {}, "All about you"),
         h("p", { class: "lede" }, "Short answers for your yearbook page. Skip any you like."),
-        ...Q.ABOUT.map(([id, text, ph]) => q(id, text, textField(P, id, { placeholder: ph, max: 160 }))));
+        ...Q.ABOUT.map(([id, text, ph], i) => q(`P${i + 1}`, text, textField(P, id, { placeholder: ph, max: 160 }))));
     });
     add("A quote you live by", el => {
       const H = get(A, ["H"]);
