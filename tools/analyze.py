@@ -25,7 +25,7 @@ from sklearn.metrics import adjusted_rand_score
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from survey_items import LIKERT_IDS, TOT_IDS, ITEM_TEXT, WORDS, WORD_CODE, SUPPORT_QS, HOST, G_QS  # noqa: E402
+from survey_items import LIKERT_IDS, TOT_IDS, ITEM_TEXT, WORDS, WORD_CODE, SUPPORT_QS, HOST, NON_PLAYERS, G_QS  # noqa: E402
 from prediction_design import NAMES  # noqa: E402
 
 TIDY = sys.argv[1]
@@ -33,7 +33,7 @@ OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path
 os.makedirs(OUT, exist_ok=True)
 rd = lambda f: pd.read_csv(os.path.join(TIDY, f"{f}.csv"))
 AL, DY, WD, PR, NOM, PRS = rd("alignment"), rd("dyads"), rd("words"), rd("predictions"), rd("nominations"), rd("pairs")
-PLAYERS = [n for n in NAMES if n != HOST]
+PLAYERS = [n for n in NAMES if n not in NON_PLAYERS]
 PAIRS = [tuple(sorted(p)) for p in itertools.combinations(NAMES, 2)]
 key = lambda a, b: tuple(sorted((a, b)))
 W_MAIN = {"closeness": .40, "time": .35, "support": .25}   # E1 lives in the perception layer, not here
@@ -107,7 +107,7 @@ P["knowing"] = pd.concat([pct(P["pred_acc"].values), pct(P["word_acc"].values)],
 
 # ---------------- trust, perception, suspicion ----------------
 trust = {k: v for k, v in dy["trust"].dropna().items()} if "trust" in dy else {}
-P["trust_raw"] = [both(trust, a, b) if HOST not in (a, b) else np.nan for a, b in P.index]
+P["trust_raw"] = [both(trust, a, b) if not set(NON_PLAYERS) & {a, b} else np.nan for a, b in P.index]
 P["trust"] = pct(P["trust_raw"].values).values
 perc = Counter(key(r.a, r.b) for r in PRS[PRS.question.isin(["E01", "E02", "E04", "E07"])].itertuples())
 P["perception_raw"] = [perc.get(k, 0) for k in P.index]

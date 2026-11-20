@@ -39,8 +39,13 @@
   }
   const NAMES = [...C.names].sort((a, b) => a.localeCompare(b));
   const others = NAMES.filter(n => n !== me);
-  const players = others.filter(n => n !== C.host);
+  const AWAY = C.away || [];                       // in the network but not at the cottage
+  const nonPlayers = [C.host, ...AWAY];            // not in Traitors
+  const players = others.filter(n => !nonPlayers.includes(n));
+  const atCottage = others.filter(n => !AWAY.includes(n));
   const isHost = me === C.host;
+  const isAway = AWAY.includes(me);
+  const poolFor = (id, ex) => ex ? players : (Q.WEEKEND_ONLY || []).includes(id) ? atCottage : others;
 
   // ---------- state ----------
   const SKEY = `winterhouse:${pilot ? "pilot:" : ""}${me}:part${part}`;
@@ -216,13 +221,16 @@
       "There are no right answers, and you can skip anything. Your progress saves on this device as you go.",
     ]);
     const B = () => get(A, ["B"]);
+    const bNum = {}; let bn = 0;
+    Q.B.forEach(g => g.items.forEach(([id]) => { bNum[id] = ++bn; }));
+    Q.TOT.forEach(([id]) => { bNum[id] = ++bn; });
     Q.B.forEach((g, gi) => add(`Where you stand: ${g.group.toLowerCase()}`, el => {
       el.append(h("p", { class: "eyebrow" }, `Where you stand · ${gi + 1} of 6`), h("h2", {}, g.group), h("p", { class: "lede" }, "How much do you agree?"));
-      g.items.forEach(([id, text]) => el.append(q(id.slice(1).replace(/^0/, ""), text, likert(B(), id))));
+      g.items.forEach(([id, text]) => el.append(q(String(bNum[id]), text, likert(B(), id))));
     }));
     [[0, 10], [10, Q.TOT.length]].forEach(([s, e], k) => add("This or that", el => {
       el.append(h("p", { class: "eyebrow" }, `Where you stand · ${5 + k} of 6`), h("h2", {}, "This or that"), h("p", { class: "lede" }, "Go with your gut."));
-      Q.TOT.slice(s, e).forEach(([id, a, b]) => el.append(q(id.slice(1), "", tot(B(), id, a, b))));
+      Q.TOT.slice(s, e).forEach(([id, a, b]) => el.append(q(String(bNum[id]), "", tot(B(), id, a, b))));
     }));
     add("Group quotes", el => {
       const H = get(A, ["H"]); if (!Array.isArray(H.quotes) || !H.quotes.length) H.quotes = [{}];
@@ -300,10 +308,9 @@
     });
     add("Off the record", el => {
       const F = get(A, ["F"]);
-      el.append(h("p", { class: "eyebrow" }, "Off the record"), h("h2", {}, "Three last things"),
+      el.append(h("p", { class: "eyebrow" }, "Off the record"), h("h2", {}, isAway ? "One last thing" : "Two last things"),
         q("F1", "What is a fun fact about yourself that not many people know?", h("p", { class: "hint" }, "3 sentences max. Used anonymously in a \"who wrote this?\" game."), textField(F, "F1", { multiline: true, max: 400 })),
-        q("F2", "Is there anything you'd like to get out of this weekend?", h("p", { class: "hint" }, "Optional. Goes to Ryan so he can plan around it."), textField(F, "F2", { multiline: true })),
-        q("F3", "Anything you'd rather we not bring up this weekend?", h("p", { class: "hint" }, "Optional. Only Ryan sees it, and it keeps games and quotes off that topic."), textField(F, "F3", { multiline: true })));
+        isAway ? null : q("F2", "Is there anything you'd like to get out of this weekend?", h("p", { class: "hint" }, "Optional. Goes to Ryan so he can plan around it."), textField(F, "F2", { multiline: true })));
     });
   } else {
     intro("Part 2: The Network", [
@@ -326,7 +333,7 @@
     const order = others;
     order.forEach((n, k) => add(n, el => {
       const P = get(A, ["A", "people", n]);
-      const noTrust = n === C.host || isHost;
+      const noTrust = nonPlayers.includes(n) || nonPlayers.includes(me);
       el.append(h("p", { class: "eyebrow" }, `Your people · ${k + 1} of ${order.length}`), h("h2", { class: "person" }, n));
       const skipBox = h("input", { type: "checkbox", id: `unk-${n}` }); skipBox.checked = !!P.unknown;
       const wordsQs = h("div", { class: "qgroup" },
@@ -360,7 +367,7 @@
       const D = get(A, ["D"]);
       el.append(h("p", { class: "eyebrow" }, "Who would you…"), h("h2", {}, title));
       Q.D.filter(d => ids.includes(d[0])).forEach(([id, text, max, ex]) =>
-        el.append(q(id.replace("D0", "D"), text, multiPick(D, id, ex ? players : others, max))));
+        el.append(q(id.replace("D0", "D"), text, multiPick(D, id, poolFor(id, ex), max))));
     });
     nomScreen("Your people", ["D01", "D02", "D03", "D04", "D05", "D06", "D07", "D08", "D09"]);
     nomScreen("The game", ["D10", "D11", "D12", "D13"]);
@@ -370,7 +377,7 @@
       el.append(h("p", { class: "eyebrow" }, "The group's view"), h("h2", {}, "Unexpected Pairings and more"),
         h("p", { class: "lede" }, "You're the observer here. Pairs never include you."));
       Q.E.forEach(([id, text, kind, n, ex]) => {
-        const pool = ex ? players : others;
+        const pool = poolFor(id, ex);
         el.append(q(id.replace("E0", "E"), text, kind === "pair" ? pairPicker(E, id, pool, n) : multiPick(E, id, pool, n)));
       });
     });

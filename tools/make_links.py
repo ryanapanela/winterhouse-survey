@@ -18,8 +18,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import prediction_design as pdz  # noqa: E402
-
-HOST = "Ryan"
+from survey_items import HOST, AWAY  # noqa: E402
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--site", required=True)
@@ -52,6 +51,7 @@ with open(os.path.join(priv, "links.csv"), "w", newline="") as f:
 cfg = {
     "endpoint": a.endpoint.rstrip("/"),
     "host": HOST,
+    "away": AWAY,
     "names": pdz.NAMES,
     "albumLink": a.album,
     "prediction": pdz.by_predictor(pdz.build()),

@@ -1,11 +1,14 @@
 """Survey item metadata for the analysis tools.
 
-Mirrors docs/questions.js (generated from it on 2026-11-16). If you change an id,
+Mirrors docs/questions.js (generated from it on 2026-11-20). If you change an id,
 a word, or a block letter there, change it here too.
 """
 HOST = "Ryan"  # hosts Traitors, so he is never a target of Traitors questions
+AWAY = ["Jesse"]  # in the network but not at the cottage: not in Traitors or weekend-only picks
+NON_PLAYERS = [HOST] + AWAY
+WEEKEND_ONLY = ["D13", "E03", "E07"]
 
-LIKERT_IDS = ["B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B09", "B10", "B11", "B12", "B13", "B14", "B15", "B16", "B17", "B18", "B19", "B20", "B21", "B22", "B23", "B24", "B25", "B26", "B27", "B28", "B29", "B30"]
+LIKERT_IDS = ["B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B09", "B10", "B11", "B12", "B13", "B14", "B15", "B16", "B17", "B18", "B19", "B20", "B21", "B22", "B23", "B24", "B25", "B26", "B27", "B28", "B29", "B30", "B52"]
 TOT_IDS = ["B31", "B32", "B33", "B34", "B35", "B36", "B37", "B38", "B39", "B40", "B41", "B42", "B43", "B44", "B45", "B46", "B47", "B48", "B49", "B50", "B51"]
 ITEM_TEXT = {
  "B01": "Honesty beats kindness when the two conflict.",
@@ -30,7 +33,7 @@ ITEM_TEXT = {
  "B20": "I'd sing karaoke completely sober.",
  "B21": "I'm a better listener than talker.",
  "B22": "I care what strangers think of me.",
- "B23": "I cry at movies.",
+ "B23": "I would cry in public.",
  "B24": "Academia is worth it.",
  "B25": "I'll stay in research after the PhD.",
  "B26": "Reviewer 2 is usually right.",
@@ -58,7 +61,8 @@ ITEM_TEXT = {
  "B48": "Head, for big decisions · Heart, for big decisions",
  "B49": "Be famous · Be powerful",
  "B50": "Read the whole group chat · Skim and react",
- "B51": "Pho · Ramen"
+ "B51": "Pho · Ramen",
+ "B52": "Friends are just as valuable as a romantic partner."
 }
 BLOCKS = {"A": ["B01", "B09", "B17", "B24", "B31", "B42"], "B": ["B03", "B10", "B19", "B25", "B33", "B43"], "C": ["B04", "B11", "B20", "B26", "B35", "B46"], "D": ["B06", "B13", "B23", "B27", "B37", "B48"]}  # prediction-game item blocks
 

@@ -23,6 +23,7 @@ window.Q = {
       ["B14", "Splitting the bill evenly is fair, whatever people ordered.", null],
       ["B15", "Group chats should have rules.", null],
       ["B16", "Being late is disrespectful.", null],
+      ["B52", "Friends are just as valuable as a romantic partner.", null],
     ]},
     { group: "Social style", items: [
       ["B17", "I recharge best alone.", "A"],
@@ -31,7 +32,7 @@ window.Q = {
       ["B20", "I'd sing karaoke completely sober.", "C"],
       ["B21", "I'm a better listener than talker.", null],
       ["B22", "I care what strangers think of me.", null],
-      ["B23", "I cry at movies.", "D"],
+      ["B23", "I would cry in public.", "D"],
     ]},
     { group: "Grad school", items: [
       ["B24", "Academia is worth it.", "A"],
@@ -145,6 +146,8 @@ window.Q = {
     ["P4", "What's your go-to karaoke song?", ""],
     ["P5", "What show do you rewatch when you need comfort?", ""],
   ],
+  // Picks about things happening at the cottage: people who can't come (config "away") are left out of these.
+  WEEKEND_ONLY: ["D13", "E03", "E07"],
   // Awards with a story box under the pick.
   G_STORY: {},
   // Supervisor names were removed; G22 is now a pick of the student instead.

@@ -11,7 +11,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import prediction_design as pdz  # noqa: E402
-from survey_items import LIKERT_IDS, TOT_IDS, WORDS, WORD_CODE, BLOCKS, D_QS, E_QS, G_QS, HOST  # noqa: E402
+from survey_items import LIKERT_IDS, TOT_IDS, WORDS, WORD_CODE, BLOCKS, D_QS, E_QS, G_QS, HOST, NON_PLAYERS, AWAY, WEEKEND_ONLY  # noqa: E402
 
 ap = argparse.ArgumentParser()
 ap.add_argument("out")
@@ -21,7 +21,8 @@ R = np.random.default_rng(a.seed)
 NAMES = pdz.NAMES
 N = len(NAMES)
 ix = {n: i for i, n in enumerate(NAMES)}
-PLAYERS = [n for n in NAMES if n != HOST]
+PLAYERS = [n for n in NAMES if n not in NON_PLAYERS]
+ATCOTTAGE = [n for n in NAMES if n not in AWAY]
 
 # ---- hidden truth: 3 circles, 2 bridges, 1 newcomer ----
 perm = R.permutation(N)
@@ -92,7 +93,7 @@ for i, me in enumerate(NAMES):
     p1 = {"B": B[i],
           "H": {"quotes": [{"text": R.choice(QUOTES), "who": str(R.choice([n for n in NAMES if n != me]))}],
                 "fav": "Be so good they can't ignore you", "photos": [], "videos": ""},
-          "F": {"F1": "", "F2": "", "F3": ""}}
+          "F": {"F1": "", "F2": ""}}
     json.dump({"me": me, "part": 1, "pilot": False, "answers": p1, "meta": {"submittedAt": "2026-11-18T20:00:00Z"}},
               open(os.path.join(a.out, "responses", "part1", f"{me}.json"), "w"), indent=1)
     # Part 2
@@ -109,7 +110,7 @@ for i, me in enumerate(NAMES):
             acc = sig(1.3 * L[i, j])            # how well i guesses j's words for i
             P["meta"] = list(picks[(j, i)][:int(R.binomial(3, acc))])
             P["meta"] += [w for w in noisy_words(i, .3) if w not in P["meta"]][:3 - len(P["meta"])]
-        if me != HOST and other != HOST:
+        if me not in NON_PLAYERS and other not in NON_PLAYERS:
             P["trust"] = clip(3 + .8 * L[i, j] + trust_true[j] + R.normal(0, .6), 1, 5)
             if not unknown:
                 actual = 3 + .8 * L[j, i] + trust_true[i]
@@ -130,7 +131,7 @@ for i, me in enumerate(NAMES):
     # Nominations
     D = {}
     for qid, _, k, ex in D_QS:
-        pool = PLAYERS if ex else NAMES
+        pool = PLAYERS if ex else ATCOTTAGE if qid in WEEKEND_ONLY else NAMES
         if qid in ("D01", "D02", "D03", "D04"): score = 2.0 * L[i]
         elif qid == "D05": score = 2.5 * ALIGN[i] - 1.2 * L[i]
         elif qid == "D10": score = 1.5 * soc - .5 * L[i] - trust_true + R.normal(0, .6, N)
@@ -140,7 +141,7 @@ for i, me in enumerate(NAMES):
     E = {}
     others = [n for n in NAMES if n != me]
     for qid, _, kind, k, ex in E_QS:
-        pool = [n for n in (PLAYERS if ex else others) if n != me]
+        pool = [n for n in (PLAYERS if ex else [o for o in others if o not in AWAY] if qid in WEEKEND_ONLY else others) if n != me]
         if kind == "person":
             score = (soc * 2 if qid == "E09" else soc + R.normal(0, .5, N))
             E[qid] = pick_people(i, score, k, pool)

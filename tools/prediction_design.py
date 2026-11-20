@@ -1,20 +1,21 @@
-"""Prediction-game assignment: 16 people, 8 targets each, 6 items per target.
+"""Prediction-game assignment: 17 people, 8 targets each, 6 items per target.
 
-Cyclic design on a shuffled ring using all 8 odd offsets. Offsets d and 16-d share an
-item block, so every prediction is mutual and both people guess the same 6 items.
-Balance: everyone predicts 8 and is predicted by 8; each block appears twice per
-predictor and twice per target; 64 of the 120 pairs are covered.
+Cyclic design on a shuffled ring. Each person predicts the people 1, 2, 4 and 8 places
+ahead of them and 1, 2, 4 and 8 places behind (offsets 1, 2, 4, 8, 9, 13, 15, 16).
+Offsets d and 17-d share an item block, so every prediction is mutual and both people
+guess the same 6 items. Balance: everyone predicts 8 and is predicted by 8; each block
+appears twice per predictor and twice per target; 68 of the 136 pairs are covered.
 """
 import collections
 import random
 
 NAMES = ["Ryan", "Lola", "Sarra", "Eloise", "Mikayla", "Elaine", "Hanieh", "Ruth",
-         "Sarah", "Zachary", "Leif", "Norman", "Mac", "Elizabeth", "Princeton", "Colin"]
-BLOCK = {1: "A", 15: "A", 3: "B", 13: "B", 5: "C", 11: "C", 7: "D", 9: "D"}
+         "Sarah", "Zachary", "Leif", "Norman", "Mac", "Elizabeth", "Princeton", "Colin", "Jesse"]
+BLOCK = {1: "A", 16: "A", 2: "B", 15: "B", 4: "C", 13: "C", 8: "D", 9: "D"}
 
 # Fixed ring (seed 1127) so the assignments match the survey doc.
-RING = ["Lola", "Norman", "Eloise", "Princeton", "Colin", "Elizabeth", "Mac", "Zachary",
-        "Ruth", "Sarah", "Hanieh", "Elaine", "Ryan", "Leif", "Mikayla", "Sarra"]
+RING = ["Lola", "Princeton", "Sarah", "Eloise", "Colin", "Ryan", "Jesse", "Ruth", "Norman",
+        "Mac", "Mikayla", "Leif", "Elizabeth", "Elaine", "Zachary", "Hanieh", "Sarra"]
 
 
 def build(ring=RING):
@@ -33,6 +34,7 @@ def check(rows, n):
     s = set(rows)
     assert all((b, a, k) in s for a, b, k in rows), "every prediction should be mutual"
     assert all(a != b for a, b, _ in rows)
+    assert len(rows) == len(set((a, b) for a, b, _ in rows)), "nobody predicts the same person twice"
 
 
 def by_predictor(rows):
@@ -45,6 +47,7 @@ def by_predictor(rows):
 if __name__ == "__main__":
     rows = build()
     pairs = {frozenset((a, b)) for a, b, _ in rows}
-    print(f"balanced design OK; pairs covered {len(pairs)}/120")
+    n = len(NAMES)
+    print(f"balanced design OK; pairs covered {len(pairs)}/{n * (n - 1) // 2}")
     for p, ts in by_predictor(rows).items():
         print(p, "->", ", ".join(f"{t} ({b})" for t, b in sorted(ts, key=lambda x: x[1])))

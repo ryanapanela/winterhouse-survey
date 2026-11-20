@@ -2,6 +2,9 @@
 window.SURVEY_CONFIG = {
  "endpoint": "https://winterhouse-survey.ryanapanela.workers.dev",
  "host": "Ryan",
+ "away": [
+  "Jesse"
+ ],
  "names": [
   "Ryan",
   "Lola",
@@ -18,47 +21,48 @@ window.SURVEY_CONFIG = {
   "Mac",
   "Elizabeth",
   "Princeton",
-  "Colin"
+  "Colin",
+  "Jesse"
  ],
  "albumLink": "",
  "prediction": {
   "Ryan": [
    [
-    "Leif",
+    "Jesse",
     "A"
    ],
    [
-    "Elaine",
+    "Colin",
     "A"
    ],
    [
-    "Sarra",
+    "Ruth",
     "B"
    ],
    [
-    "Sarah",
+    "Eloise",
     "B"
    ],
    [
-    "Norman",
-    "C"
-   ],
-   [
-    "Zachary",
+    "Mac",
     "C"
    ],
    [
     "Princeton",
+    "C"
+   ],
+   [
+    "Elaine",
     "D"
    ],
    [
-    "Elizabeth",
+    "Zachary",
     "D"
    ]
   ],
   "Lola": [
    [
-    "Norman",
+    "Princeton",
     "A"
    ],
    [
@@ -66,15 +70,15 @@ window.SURVEY_CONFIG = {
     "A"
    ],
    [
-    "Princeton",
+    "Sarah",
     "B"
    ],
    [
-    "Leif",
+    "Hanieh",
     "B"
    ],
    [
-    "Elizabeth",
+    "Colin",
     "C"
    ],
    [
@@ -82,11 +86,11 @@ window.SURVEY_CONFIG = {
     "C"
    ],
    [
-    "Zachary",
+    "Norman",
     "D"
    ],
    [
-    "Sarah",
+    "Mac",
     "D"
    ]
   ],
@@ -96,117 +100,117 @@ window.SURVEY_CONFIG = {
     "A"
    ],
    [
-    "Mikayla",
+    "Hanieh",
     "A"
    ],
    [
+    "Princeton",
+    "B"
+   ],
+   [
+    "Zachary",
+    "B"
+   ],
+   [
     "Eloise",
-    "B"
-   ],
-   [
-    "Ryan",
-    "B"
-   ],
-   [
-    "Colin",
     "C"
    ],
    [
-    "Hanieh",
+    "Elizabeth",
     "C"
-   ],
-   [
-    "Mac",
-    "D"
    ],
    [
     "Ruth",
+    "D"
+   ],
+   [
+    "Norman",
     "D"
    ]
   ],
   "Eloise": [
    [
-    "Princeton",
+    "Colin",
     "A"
    ],
    [
-    "Norman",
+    "Sarah",
     "A"
    ],
    [
-    "Elizabeth",
+    "Ryan",
     "B"
+   ],
+   [
+    "Princeton",
+    "B"
+   ],
+   [
+    "Ruth",
+    "C"
    ],
    [
     "Sarra",
-    "B"
-   ],
-   [
-    "Zachary",
     "C"
    ],
    [
     "Leif",
-    "C"
-   ],
-   [
-    "Sarah",
     "D"
    ],
    [
-    "Elaine",
+    "Elizabeth",
     "D"
    ]
   ],
   "Mikayla": [
    [
-    "Sarra",
+    "Leif",
     "A"
    ],
    [
-    "Leif",
+    "Mac",
     "A"
+   ],
+   [
+    "Elizabeth",
+    "B"
    ],
    [
     "Norman",
     "B"
    ],
    [
-    "Elaine",
-    "B"
+    "Zachary",
+    "C"
+   ],
+   [
+    "Jesse",
+    "C"
    ],
    [
     "Princeton",
-    "C"
-   ],
-   [
-    "Sarah",
-    "C"
-   ],
-   [
-    "Elizabeth",
     "D"
    ],
    [
-    "Zachary",
+    "Sarah",
     "D"
    ]
   ],
   "Elaine": [
    [
-    "Ryan",
+    "Zachary",
+    "A"
+   ],
+   [
+    "Elizabeth",
     "A"
    ],
    [
     "Hanieh",
-    "A"
-   ],
-   [
-    "Mikayla",
     "B"
    ],
    [
-    "Ruth",
+    "Leif",
     "B"
    ],
    [
@@ -218,63 +222,63 @@ window.SURVEY_CONFIG = {
     "C"
    ],
    [
-    "Eloise",
+    "Colin",
     "D"
    ],
    [
-    "Colin",
+    "Ryan",
     "D"
    ]
   ],
   "Hanieh": [
    [
-    "Elaine",
+    "Sarra",
     "A"
-   ],
-   [
-    "Sarah",
-    "A"
-   ],
-   [
-    "Leif",
-    "B"
    ],
    [
     "Zachary",
+    "A"
+   ],
+   [
+    "Lola",
     "B"
    ],
    [
-    "Sarra",
+    "Elaine",
+    "B"
+   ],
+   [
+    "Sarah",
     "C"
    ],
    [
-    "Elizabeth",
+    "Leif",
     "C"
    ],
    [
-    "Norman",
+    "Jesse",
     "D"
    ],
    [
-    "Princeton",
+    "Ruth",
     "D"
    ]
   ],
   "Ruth": [
    [
-    "Sarah",
+    "Norman",
     "A"
    ],
    [
-    "Zachary",
+    "Jesse",
     "A"
    ],
    [
-    "Elaine",
+    "Mac",
     "B"
    ],
    [
-    "Elizabeth",
+    "Ryan",
     "B"
    ],
    [
@@ -282,105 +286,105 @@ window.SURVEY_CONFIG = {
     "C"
    ],
    [
-    "Princeton",
+    "Eloise",
     "C"
    ],
    [
-    "Sarra",
+    "Hanieh",
     "D"
    ],
    [
-    "Norman",
+    "Sarra",
     "D"
    ]
   ],
   "Sarah": [
    [
-    "Hanieh",
+    "Eloise",
     "A"
    ],
    [
-    "Ruth",
+    "Princeton",
     "A"
-   ],
-   [
-    "Ryan",
-    "B"
-   ],
-   [
-    "Mac",
-    "B"
-   ],
-   [
-    "Mikayla",
-    "C"
    ],
    [
     "Colin",
-    "C"
+    "B"
    ],
    [
     "Lola",
+    "B"
+   ],
+   [
+    "Jesse",
+    "C"
+   ],
+   [
+    "Hanieh",
+    "C"
+   ],
+   [
+    "Mikayla",
     "D"
    ],
    [
-    "Eloise",
+    "Leif",
     "D"
    ]
   ],
   "Zachary": [
    [
-    "Ruth",
-    "A"
-   ],
-   [
-    "Mac",
-    "A"
-   ],
-   [
     "Hanieh",
+    "A"
+   ],
+   [
+    "Elaine",
+    "A"
+   ],
+   [
+    "Sarra",
     "B"
    ],
    [
-    "Colin",
+    "Elizabeth",
     "B"
    ],
    [
-    "Ryan",
-    "C"
-   ],
-   [
-    "Eloise",
+    "Princeton",
     "C"
    ],
    [
     "Mikayla",
+    "C"
+   ],
+   [
+    "Ryan",
     "D"
    ],
    [
-    "Lola",
+    "Jesse",
     "D"
    ]
   ],
   "Leif": [
    [
+    "Elizabeth",
+    "A"
+   ],
+   [
     "Mikayla",
     "A"
    ],
    [
-    "Ryan",
-    "A"
+    "Elaine",
+    "B"
    ],
    [
-    "Lola",
+    "Mac",
     "B"
    ],
    [
     "Hanieh",
-    "B"
-   ],
-   [
-    "Eloise",
     "C"
    ],
    [
@@ -388,63 +392,63 @@ window.SURVEY_CONFIG = {
     "C"
    ],
    [
-    "Colin",
+    "Sarah",
     "D"
    ],
    [
-    "Mac",
+    "Eloise",
     "D"
    ]
   ],
   "Norman": [
    [
-    "Eloise",
+    "Mac",
     "A"
    ],
    [
-    "Lola",
+    "Ruth",
     "A"
-   ],
-   [
-    "Colin",
-    "B"
    ],
    [
     "Mikayla",
     "B"
    ],
    [
-    "Mac",
+    "Jesse",
+    "B"
+   ],
+   [
+    "Elizabeth",
     "C"
    ],
    [
-    "Ryan",
+    "Colin",
     "C"
    ],
    [
-    "Ruth",
+    "Sarra",
     "D"
    ],
    [
-    "Hanieh",
+    "Lola",
     "D"
    ]
   ],
   "Mac": [
    [
-    "Zachary",
+    "Mikayla",
     "A"
    ],
    [
-    "Elizabeth",
+    "Norman",
     "A"
    ],
    [
-    "Sarah",
+    "Leif",
     "B"
    ],
    [
-    "Princeton",
+    "Ruth",
     "B"
    ],
    [
@@ -452,93 +456,25 @@ window.SURVEY_CONFIG = {
     "C"
    ],
    [
-    "Norman",
+    "Ryan",
     "C"
    ],
    [
-    "Leif",
+    "Lola",
     "D"
    ],
    [
-    "Sarra",
+    "Princeton",
     "D"
    ]
   ],
   "Elizabeth": [
    [
-    "Mac",
+    "Elaine",
     "A"
    ],
    [
-    "Colin",
-    "A"
-   ],
-   [
-    "Ruth",
-    "B"
-   ],
-   [
-    "Eloise",
-    "B"
-   ],
-   [
-    "Hanieh",
-    "C"
-   ],
-   [
-    "Lola",
-    "C"
-   ],
-   [
-    "Ryan",
-    "D"
-   ],
-   [
-    "Mikayla",
-    "D"
-   ]
-  ],
-  "Princeton": [
-   [
-    "Colin",
-    "A"
-   ],
-   [
-    "Eloise",
-    "A"
-   ],
-   [
-    "Mac",
-    "B"
-   ],
-   [
-    "Lola",
-    "B"
-   ],
-   [
-    "Ruth",
-    "C"
-   ],
-   [
-    "Mikayla",
-    "C"
-   ],
-   [
-    "Hanieh",
-    "D"
-   ],
-   [
-    "Ryan",
-    "D"
-   ]
-  ],
-  "Colin": [
-   [
-    "Elizabeth",
-    "A"
-   ],
-   [
-    "Princeton",
+    "Leif",
     "A"
    ],
    [
@@ -546,23 +482,125 @@ window.SURVEY_CONFIG = {
     "B"
    ],
    [
-    "Norman",
+    "Mikayla",
     "B"
-   ],
-   [
-    "Sarah",
-    "C"
    ],
    [
     "Sarra",
     "C"
    ],
    [
-    "Elaine",
+    "Norman",
+    "C"
+   ],
+   [
+    "Eloise",
     "D"
    ],
    [
-    "Leif",
+    "Colin",
+    "D"
+   ]
+  ],
+  "Princeton": [
+   [
+    "Sarah",
+    "A"
+   ],
+   [
+    "Lola",
+    "A"
+   ],
+   [
+    "Eloise",
+    "B"
+   ],
+   [
+    "Sarra",
+    "B"
+   ],
+   [
+    "Ryan",
+    "C"
+   ],
+   [
+    "Zachary",
+    "C"
+   ],
+   [
+    "Mac",
+    "D"
+   ],
+   [
+    "Mikayla",
+    "D"
+   ]
+  ],
+  "Colin": [
+   [
+    "Ryan",
+    "A"
+   ],
+   [
+    "Eloise",
+    "A"
+   ],
+   [
+    "Jesse",
+    "B"
+   ],
+   [
+    "Sarah",
+    "B"
+   ],
+   [
+    "Norman",
+    "C"
+   ],
+   [
+    "Lola",
+    "C"
+   ],
+   [
+    "Elizabeth",
+    "D"
+   ],
+   [
+    "Elaine",
+    "D"
+   ]
+  ],
+  "Jesse": [
+   [
+    "Ruth",
+    "A"
+   ],
+   [
+    "Ryan",
+    "A"
+   ],
+   [
+    "Norman",
+    "B"
+   ],
+   [
+    "Colin",
+    "B"
+   ],
+   [
+    "Mikayla",
+    "C"
+   ],
+   [
+    "Sarah",
+    "C"
+   ],
+   [
+    "Zachary",
+    "D"
+   ],
+   [
+    "Hanieh",
     "D"
    ]
   ]
