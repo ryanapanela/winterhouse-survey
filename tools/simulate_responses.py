@@ -93,7 +93,7 @@ for i, me in enumerate(NAMES):
     p1 = {"B": B[i],
           "H": {"quotes": [{"text": R.choice(QUOTES), "who": str(R.choice([n for n in NAMES if n != me]))}],
                 "fav": "Be so good they can't ignore you", "photos": [], "videos": ""},
-          "F": {"F1": "", "F2": ""}}
+          "F": {"F1": "", "F2": "", "F4": ""}}
     json.dump({"me": me, "part": 1, "pilot": False, "answers": p1, "meta": {"submittedAt": "2026-11-18T20:00:00Z"}},
               open(os.path.join(a.out, "responses", "part1", f"{me}.json"), "w"), indent=1)
     # Part 2

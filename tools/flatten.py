@@ -3,14 +3,14 @@
 Usage:  python3 tools/flatten.py path/to/winterhouse-data  [out_dir]
 
 Writes (long format, one row per answer):
-  alignment.csv     person, item, value            (B01–B30 and B52 as 1–5, B31–B51 as a/b)
+  alignment.csv     person, item, value            (B01–B30 and B52 as 1–5, B31–B51 and B53 as a/b)
   dyads.csv         rater, target, measure, value  (ios, time, trust, metaTrust, unknown, history)
   words.csv         rater, target, kind, word      (kind = words | meta | self)
   predictions.csv   predictor, target, item, guess
   nominations.csv   rater, question, target        (D and G, plus E person questions)
   pairs.csv         rater, question, a, b          (E pair questions)
   submissions.csv   person, part, submitted_at, opt_in
-Text answers (quotes, P1–P5 "All about you", F1–F2, photo captions, award stories in G_text) are left in the JSON on purpose:
+Text answers (quotes, P1–P5 "All about you", F1, F2, F4 (hot take), photo captions, award stories in G_text) are left in the JSON on purpose:
 read them by hand only where you planned to.
 """
 import csv, glob, json, os, sys

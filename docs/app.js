@@ -307,10 +307,11 @@
         textField(H, "videos", { multiline: true, placeholder: "e.g. 2 videos: karaoke 2024, first lab retreat", max: 600 })));
     });
     add("Off the record", el => {
-      const F = get(A, ["F"]);
-      el.append(h("p", { class: "eyebrow" }, "Off the record"), h("h2", {}, isAway ? "One last thing" : "Two last things"),
+      const F = get(A, ["F"]);   // saved keys: F1 fun fact, F4 hot take, F2 weekend wish (shown as F1, F2, F3)
+      el.append(h("p", { class: "eyebrow" }, "Off the record"), h("h2", {}, isAway ? "Two last things" : "Three last things"),
         q("F1", "What is a fun fact about yourself that not many people know?", h("p", { class: "hint" }, "3 sentences max. Used anonymously in a \"who wrote this?\" game."), textField(F, "F1", { multiline: true, max: 400 })),
-        isAway ? null : q("F2", "Is there anything you'd like to get out of this weekend?", h("p", { class: "hint" }, "Optional. Goes to Ryan so he can plan around it."), textField(F, "F2", { multiline: true })));
+        q("F2", "What's your hottest take?", h("p", { class: "hint" }, "Anything goes: food, films, academia, dating, this group. Shared anonymously at the cottage for a \"who said it?\" and agree-or-disagree round."), textField(F, "F4", { multiline: true, max: 300 })),
+        isAway ? null : q("F3", "Is there anything you'd like to get out of this weekend?", h("p", { class: "hint" }, "Optional. Goes to Ryan so he can plan around it."), textField(F, "F2", { multiline: true })));
     });
   } else {
     intro("Part 2: The Network", [
