@@ -201,20 +201,6 @@ E_QS = [
   False
  ],
  [
-  "E04",
-  "Which pair is most alike?",
-  "pair",
-  1,
-  False
- ],
- [
-  "E05",
-  "Which pair is most opposite but still gets along?",
-  "pair",
-  1,
-  False
- ],
- [
   "E06",
   "Which pair would make the best secret Traitor duo?",
   "pair",
@@ -326,11 +312,6 @@ G_QS = [
  [
   "G23",
   "Most Likely to Win a German Drinking Game",
-  False
- ],
- [
-  "G18",
-  "Worst Driver",
   False
  ],
  [

@@ -408,7 +408,7 @@
     el.append(h("p", { class: "eyebrow" }, `Part ${part}`), h("h1", {}, state.submittedAt ? "Submitted. Want to update?" : "Ready to send"));
     el.append(h("p", {}, state.submittedAt
       ? `Your answers were saved on ${new Date(state.submittedAt).toLocaleString()}. You can change anything and submit again; the newest version replaces the old one.`
-      : "Your answers go straight into the group's survey data. You can come back to this link and resubmit until Sunday Nov 22."));
+      : "Your answers go straight into the group's survey data. You can come back to this link and resubmit until the end of Tuesday Nov 24."));
     const status = h("p", { class: "status", "aria-live": "polite" });
     const btn = h("button", { type: "button", class: "btn primary", onclick: async () => {
       btn.disabled = true; status.textContent = "Sending…";

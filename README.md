@@ -42,7 +42,7 @@ The site can't write to GitHub directly. That would put a write token in public 
    This writes `docs/config.js` (public, contains no codes) and `private/links.csv` (everyone's two personal links).
 5. **Turn on Pages.** In `winterhouse-survey`, go to Settings → Pages → Deploy from branch → `main` / `/docs`. Commit `docs/config.js` and push.
 6. **Test with your own links** from `private/links.csv`. A file should appear in `winterhouse-data/responses/` within a few seconds.
-7. **Send links by DM:** Part 1 on Mon Nov 16, Part 2 on Thu Nov 19. The relay refuses submissions after `CLOSES_AT` (Sun Nov 22, midnight Toronto).
+7. **Send links by DM:** Part 1 on Mon Nov 16, Part 2 on Thu Nov 19. The relay refuses submissions after `CLOSES_AT` (end of Tue Nov 24, midnight Toronto).
 
 ## Piloting
 

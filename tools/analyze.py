@@ -109,7 +109,7 @@ P["knowing"] = pd.concat([pct(P["pred_acc"].values), pct(P["word_acc"].values)],
 trust = {k: v for k, v in dy["trust"].dropna().items()} if "trust" in dy else {}
 P["trust_raw"] = [both(trust, a, b) if not set(NON_PLAYERS) & {a, b} else np.nan for a, b in P.index]
 P["trust"] = pct(P["trust_raw"].values).values
-perc = Counter(key(r.a, r.b) for r in PRS[PRS.question.isin(["E01", "E02", "E04", "E07"])].itertuples())
+perc = Counter(key(r.a, r.b) for r in PRS[PRS.question.isin(["E01", "E02", "E07"])].itertuples())
 P["perception_raw"] = [perc.get(k, 0) for k in P.index]
 P["perception"] = pct(P["perception_raw"].values).values
 susp = NOM[NOM.question == "D10"]
@@ -279,7 +279,7 @@ def guess_scores(qid, truth):
     for r in NOM[NOM.question == qid].itertuples(): out[r.rater] = round(truth.get(r.target, 0) * 100)
     for r in PRS[PRS.question == qid].itertuples(): out[r.rater] = round(float(P.at[key(r.a, r.b), "alignment"]) * 100)
     return out
-guessing = {"E04_most_alike": guess_scores("E04", None)}
+guessing = {}  # E04 (most alike pair) was removed; guess_scores kept for any future guessing game
 grown_most = [dict(name=n, votes=v) for n, v in Counter(NOM[NOM.question == "E10"].target).most_common(3)]
 AWARD_TITLE = {g[0]: g[1] for g in G_QS}
 awards = {q: dict(title=AWARD_TITLE.get(q, q), finalists=[dict(name=n, votes=v) for n, v in Counter(NOM[NOM.question == q].target).most_common(3)])
