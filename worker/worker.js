@@ -7,6 +7,7 @@
 //   REPO           "owner/winterhouse-data"
 //   TOKENS         JSON {"Ryan":"<sha256 of Ryan's code>", ...} from tools/make_links.py
 //   ALLOWED_ORIGIN "https://<you>.github.io"
+//   Routes: /submit (Submit button), /draft (autosave every minute), /load (restore on a new device), /media (photos)
 //   CLOSES_AT      optional ISO time after which submissions are refused, e.g. 2026-11-23T05:00:00Z
 //   BRANCH         optional, default "main"
 
@@ -84,22 +85,30 @@ export default {
       return json({ error: "The survey has closed. Message Ryan if you still need to send something." }, 403, headers);
 
     try {
-      if (route === "/submit") {
-        const text = JSON.stringify({ me, part, pilot: !!base, answers: body.answers, meta: { ...(body.meta || {}), receivedAt: new Date().toISOString() } }, null, 1);
+      if (route === "/submit" || route === "/draft") {
+        // /draft = automatic backup while someone is still filling it in; kept apart from real submissions.
+        const text = JSON.stringify({ me, part, pilot: !!base, draft: route === "/draft", answers: body.answers, meta: { ...(body.meta || {}), receivedAt: new Date().toISOString() } }, null, 1);
         if (text.length > MAX_JSON) return json({ error: "That's too much text to save. Shorten a long answer and try again." }, 413, headers);
-        const path = `${base}responses/part${part}/${slug(me)}.json`;
-        await putFile(env, path, b64(enc.encode(text)), `${base ? "Pilot " : ""}Part ${part}: ${me}`);
+        const folder = route === "/draft" ? "drafts" : "responses";
+        const path = `${base}${folder}/part${part}/${slug(me)}.json`;
+        await putFile(env, path, b64(enc.encode(text)), `${base ? "Pilot " : ""}${route === "/draft" ? "Autosave" : "Part"} ${part}: ${me}`);
         return json({ ok: true, path }, 200, headers);
       }
       if (route === "/load") {
-        const path = `${base}responses/part${part}/${slug(me)}.json`;
-        const r = await gh(env, `${path}?ref=${env.BRANCH || "main"}`);
-        if (r.status === 404) return json({ found: false }, 200, headers);
-        if (!r.ok) throw new Error(`GitHub read failed (${r.status})`);
-        const file = await r.json();
-        const bytes = Uint8Array.from(atob(file.content.replace(/\n/g, "")), c => c.charCodeAt(0));
-        const saved = JSON.parse(new TextDecoder().decode(bytes));
-        return json({ found: true, answers: saved.answers, submittedAt: saved.meta?.submittedAt }, 200, headers);
+        // Newest of the last submission and the last autosave.
+        const read = async folder => {
+          const r = await gh(env, `${base}${folder}/part${part}/${slug(me)}.json?ref=${env.BRANCH || "main"}`);
+          if (r.status === 404) return null;
+          if (!r.ok) throw new Error(`GitHub read failed (${r.status})`);
+          const file = await r.json();
+          const bytes = Uint8Array.from(atob(file.content.replace(/\n/g, "")), c => c.charCodeAt(0));
+          return JSON.parse(new TextDecoder().decode(bytes));
+        };
+        const sub = await read("responses"), dft = await read("drafts");
+        const t = d => Date.parse(d?.meta?.receivedAt || 0) || 0;
+        const best = sub && (!dft || t(sub) >= t(dft)) ? sub : dft;
+        if (!best) return json({ found: false }, 200, headers);
+        return json({ found: true, answers: best.answers, submittedAt: sub?.meta?.submittedAt, fromDraft: best === dft }, 200, headers);
       }
       if (route === "/media") {
         const id = String(body.id || "");

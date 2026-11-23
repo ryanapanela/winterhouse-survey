@@ -53,6 +53,7 @@ The site can't write to GitHub directly. That would put a write token in public 
 - People can reopen their link and resubmit. The newest version replaces the old one, and git history keeps the old ones.
 - Progress saves on each person's device as they go. If they open their link on a different device, the site reloads whatever they last submitted, so nothing gets wiped.
 - Photos upload the moment they're picked (people can select many at once), resized to 1800 px. Each gets a unique name, so nothing is ever overwritten: everything in `media/<Name>/` is theirs, even if they later removed it from their list. Videos go to the shared folder link.
+- Autosave: while someone is filling it in, unsent changes are backed up every minute (and when they change screens or leave the tab) to `drafts/part1|2/<Name>.json` in the data repo. The header shows "Saved 9:03 AM". Submit still writes `responses/`. `flatten.py` uses a draft only for someone who never submitted, and prints who that was.
 - If someone's link leaks, rerun `make_links.py --new-codes`, update the `TOKENS` secret, and resend links.
 
 ## Analysis

@@ -21,11 +21,19 @@ os.makedirs(out, exist_ok=True)
 T = {k: [] for k in ["alignment", "dyads", "words", "predictions", "nominations", "pairs", "submissions"]}
 HIST = ["<6 mo", "6–12 mo", "1–2 yr", "2–5 yr", "5+ yr"]
 
+def files(part):
+    """Submitted responses, plus the autosave of anyone who never pressed Submit."""
+    sub = {os.path.basename(p): p for p in glob.glob(os.path.join(src, "responses", f"part{part}", "*.json"))}
+    dft = {os.path.basename(p): p for p in glob.glob(os.path.join(src, "drafts", f"part{part}", "*.json"))}
+    for name, p in dft.items():
+        if name not in sub: print(f"part {part}: using autosave for {name} (never submitted)")
+    return [sub.get(n) or dft[n] for n in sorted(set(sub) | set(dft))]
+
 for part in (1, 2):
-    for path in sorted(glob.glob(os.path.join(src, "responses", f"part{part}", "*.json"))):
+    for path in files(part):
         d = json.load(open(path))
         me, a, meta = d["me"], d.get("answers", {}), d.get("meta", {})
-        T["submissions"].append([me, part, meta.get("submittedAt", ""), a.get("optIn", "")])
+        T["submissions"].append([me, part, meta.get("submittedAt", "") or ("autosave " + meta.get("savedAt", "")), a.get("optIn", "")])
         if part == 1:
             for item, v in (a.get("B") or {}).items():
                 if v is not None:

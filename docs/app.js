@@ -55,7 +55,9 @@
   if (freshDevice) state = { answers: {}, idx: 0, startedAt: new Date().toISOString() };
   const A = state.answers;
   let saveTimer;
-  const save = () => { clearTimeout(saveTimer); saveTimer = setTimeout(() => { try { localStorage.setItem(SKEY, JSON.stringify(state)); } catch {} }, 150); };
+  let dirty = false;   // changed since the last cloud backup
+  const saveLocal = () => { clearTimeout(saveTimer); saveTimer = setTimeout(() => { try { localStorage.setItem(SKEY, JSON.stringify(state)); } catch {} }, 150); };
+  const save = () => { dirty = true; saveLocal(); };   // an answer changed
 
   // ---------- controls ----------
   function segmented(bucket, id, labels, { values, cls = "", aria } = {}) {
@@ -405,6 +407,15 @@
     });
   }
 
+  // What gets sent: drop photo previews, failed uploads and empty quotes.
+  const cleanAnswers = () => {
+    const clean = JSON.parse(JSON.stringify(A));
+    if (clean.H?.photos) clean.H.photos = clean.H.photos.filter(p => p && p.path).map(({ preview, error, ...p }) => p);
+    if (clean.H?.baby) delete clean.H.baby.preview;
+    if (clean.H?.quotes) clean.H.quotes = clean.H.quotes.filter(q => q && (q.text || "").trim());
+    return clean;
+  };
+
   add("Submit", el => {
     el.append(h("p", { class: "eyebrow" }, `Part ${part}`), h("h1", {}, state.submittedAt ? "Submitted. Want to update?" : "Ready to send"));
     el.append(h("p", {}, state.submittedAt
@@ -415,12 +426,9 @@
       btn.disabled = true; status.textContent = "Sending…";
       try {
         const submittedAt = new Date().toISOString();
-        const clean = JSON.parse(JSON.stringify(A));
-        if (clean.H?.photos) clean.H.photos = clean.H.photos.filter(p => p && p.path).map(({ preview, error, ...p }) => p);
-        if (clean.H?.baby) delete clean.H.baby.preview;
-        if (clean.H?.quotes) clean.H.quotes = clean.H.quotes.filter(q => q && (q.text || "").trim());
+        const clean = cleanAnswers();
         await post("/submit", { answers: clean, meta: { startedAt: state.startedAt, submittedAt, version: VERSION } });
-        state.submittedAt = submittedAt; save();
+        state.submittedAt = submittedAt; save(); dirty = false; showCloud("Submitted");
         status.textContent = part === 1 ? "Saved. Thank you! Part 2 arrives later this week." : "Saved. Thank you! See you at Winterhouse.";
         status.classList.add("ok");
       } catch (e) { status.textContent = e.message; status.classList.add("err"); }
@@ -432,7 +440,8 @@
   // ---------- shell ----------
   const bar = h("div", { class: "bar" }, h("div", { class: "fill" }));
   const crumb = h("span", { class: "crumb" });
-  const header = h("header", { class: "top" }, h("div", { class: "top-inner" }, h("span", { class: "brand" }, "Winterhouse"), crumb), bar,
+  const cloud = h("span", { class: "cloud", "aria-live": "polite" });
+  const header = h("header", { class: "top" }, h("div", { class: "top-inner" }, h("span", { class: "brand" }, "Winterhouse"), h("span", { class: "top-right" }, cloud, crumb)), bar,
     pilot ? h("div", { class: "pilot-band" }, "Pilot run: answers save to a separate test folder") : null);
   const main = h("main", { class: "screen", tabindex: "-1" });
   const back = h("button", { type: "button", class: "btn ghost", onclick: () => go(-1) }, "Back");
@@ -452,9 +461,41 @@
     next.textContent = s.intro ? "Start" : "Next";
     window.scrollTo(0, 0);
     main.focus({ preventScroll: true });
-    save();
+    saveLocal();
   }
-  function go(d) { state.idx += d; render(); }
+  function go(d) { state.idx += d; render(); backup(20000); }
+
+  // ---------- cloud backup ----------
+  // Every minute (and when moving between screens) unsent changes are backed up to the
+  // data repo's drafts/ folder, so nothing is lost if a phone dies or a tab is closed.
+  // Submit is still what counts as finished.
+  let lastBackup = 0, backingUp = false;
+  function showCloud(text) { cloud.textContent = text; }
+  async function backup(minGap = 0) {
+    if (!dirty || backingUp || !C.endpoint || !navigator.onLine || !Object.keys(A).length) return;
+    if (Date.now() - lastBackup < minGap) return;
+    backingUp = true; dirty = false;
+    try {
+      await post("/draft", { answers: cleanAnswers(), meta: { startedAt: state.startedAt, savedAt: new Date().toISOString(), version: VERSION } });
+      lastBackup = Date.now();
+      showCloud("Saved " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }));
+    } catch (e) {
+      dirty = true;
+      showCloud(/closed|recognised/.test(e.message) ? "Not saving: " + e.message.split(".")[0] : "Saved on this device");
+    }
+    backingUp = false;
+  }
+  if (!freshDevice && !state.submittedAt && Object.keys(A).length) dirty = true;   // progress from before autosave existed gets backed up too
+  setTimeout(() => backup(0), 5000);
+  setInterval(() => backup(0), 60000);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "hidden" || !dirty || !C.endpoint || !Object.keys(A).length) return;
+    try {   // keepalive lets the request finish after the tab is hidden or closed
+      fetch(C.endpoint.replace(/\/$/, "") + "/draft", { method: "POST", keepalive: true, headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ me, k: key, part, pilot, answers: cleanAnswers(), meta: { startedAt: state.startedAt, savedAt: new Date().toISOString(), version: VERSION } }) });
+      dirty = false;
+    } catch {}
+  });
   render();
   // Opening the link on a new device: bring back what they already submitted.
   if (freshDevice && C.endpoint) {
@@ -463,7 +504,9 @@
       Object.assign(A, res.answers);
       state.submittedAt = res.submittedAt || state.submittedAt;
       render();
-      const note = h("p", { class: "restored" }, "We've loaded the answers you already sent. Pick up where you left off, then submit again to save changes.");
+      const note = h("p", { class: "restored" }, res.fromDraft
+        ? "We've loaded your saved progress. Pick up where you left off, and press Submit at the end."
+        : "We've loaded the answers you already sent. Pick up where you left off, then submit again to save changes.");
       main.prepend(note);
     }).catch(() => {});
   }
