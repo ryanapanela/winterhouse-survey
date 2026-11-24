@@ -21,13 +21,24 @@ os.makedirs(out, exist_ok=True)
 T = {k: [] for k in ["alignment", "dyads", "words", "predictions", "nominations", "pairs", "submissions"]}
 HIST = ["<6 mo", "6–12 mo", "1–2 yr", "2–5 yr", "5+ yr"]
 
+def received(path):
+    try: return json.load(open(path)).get("meta", {}).get("receivedAt", "")
+    except Exception: return ""
+
+
 def files(part):
-    """Submitted responses, plus the autosave of anyone who never pressed Submit."""
+    """For each person, the newer of their submission and their autosave (by when the relay received it).
+    Covers people who never pressed Submit and people who edited after submitting."""
     sub = {os.path.basename(p): p for p in glob.glob(os.path.join(src, "responses", f"part{part}", "*.json"))}
     dft = {os.path.basename(p): p for p in glob.glob(os.path.join(src, "drafts", f"part{part}", "*.json"))}
-    for name, p in dft.items():
-        if name not in sub: print(f"part {part}: using autosave for {name} (never submitted)")
-    return [sub.get(n) or dft[n] for n in sorted(set(sub) | set(dft))]
+    out = []
+    for n in sorted(set(sub) | set(dft)):
+        if n in dft and (n not in sub or received(dft[n]) > received(sub[n])):
+            print(f"part {part}: using autosave for {n[:-5]} ({'never submitted' if n not in sub else 'edited after submitting'})")
+            out.append(dft[n])
+        else:
+            out.append(sub[n])
+    return out
 
 for part in (1, 2):
     for path in files(part):

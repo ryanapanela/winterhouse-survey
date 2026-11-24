@@ -199,7 +199,7 @@ leave_one_out = [dict(dropped=t, rank_rho=combos[combo_key([x for x in DEFAULT_O
 schemes = {"Main": W_MAIN, "Equal": dict.fromkeys(W_MAIN, 1 / 3),
            "Feelings-heavy": {"closeness": .6, "time": .2, "support": .2},
            "Behaviour-heavy": {"closeness": .2, "time": .6, "support": .2}}
-X = P[[f + "_p" for f in W_MAIN]].values; Xc = (X - X.mean(0)) / X.std(0)
+X = P[[f + "_p" for f in W_MAIN]].dropna().values; Xc = (X - X.mean(0)) / X.std(0)   # pairs with all three facets
 ev, evec = np.linalg.eigh(np.cov(Xc.T)); pc = np.abs(evec[:, -1]) / np.abs(evec[:, -1]).sum()
 schemes["PCA-derived"] = dict(zip(W_MAIN, pc.round(3)))
 robust = []

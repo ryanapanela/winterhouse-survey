@@ -57,7 +57,9 @@
   let saveTimer;
   let dirty = false;   // changed since the last cloud backup
   const saveLocal = () => { clearTimeout(saveTimer); saveTimer = setTimeout(() => { try { localStorage.setItem(SKEY, JSON.stringify(state)); } catch {} }, 150); };
-  const save = () => { dirty = true; saveLocal(); };   // an answer changed
+  const save = () => { dirty = true; state.changedAt = new Date().toISOString(); saveLocal(); };   // an answer changed
+  // true if any real answer exists (screens create empty buckets just by being visited)
+  const hasAnswers = o => o != null && (typeof o !== "object" ? o !== "" : Object.values(o).some(hasAnswers));
 
   // ---------- controls ----------
   function segmented(bucket, id, labels, { values, cls = "", aria } = {}) {
@@ -428,7 +430,7 @@
         const submittedAt = new Date().toISOString();
         const clean = cleanAnswers();
         await post("/submit", { answers: clean, meta: { startedAt: state.startedAt, submittedAt, version: VERSION } });
-        state.submittedAt = submittedAt; save(); dirty = false; showCloud("Submitted");
+        state.submittedAt = submittedAt; state.lastSentAt = submittedAt; saveLocal(); dirty = false; showCloud("Submitted");
         status.textContent = part === 1 ? "Saved. Thank you! Part 2 arrives later this week." : "Saved. Thank you! See you at Winterhouse.";
         status.classList.add("ok");
       } catch (e) { status.textContent = e.message; status.classList.add("err"); }
@@ -469,15 +471,16 @@
   // Every minute (and when moving between screens) unsent changes are backed up to the
   // data repo's drafts/ folder, so nothing is lost if a phone dies or a tab is closed.
   // Submit is still what counts as finished.
-  let lastBackup = 0, backingUp = false;
+  let lastBackup = 0, backingUp = false, syncing = !!C.endpoint;   // no backups until the cloud copy has been checked
   function showCloud(text) { cloud.textContent = text; }
   async function backup(minGap = 0) {
-    if (!dirty || backingUp || !C.endpoint || !navigator.onLine || !Object.keys(A).length) return;
+    if (!dirty || backingUp || syncing || !C.endpoint || !navigator.onLine || !hasAnswers(A)) return;
     if (Date.now() - lastBackup < minGap) return;
     backingUp = true; dirty = false;
     try {
-      await post("/draft", { answers: cleanAnswers(), meta: { startedAt: state.startedAt, savedAt: new Date().toISOString(), version: VERSION } });
-      lastBackup = Date.now();
+      const savedAt = new Date().toISOString();
+      await post("/draft", { answers: cleanAnswers(), meta: { startedAt: state.startedAt, savedAt, version: VERSION } });
+      lastBackup = Date.now(); state.lastSentAt = savedAt; saveLocal();
       showCloud("Saved " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }));
     } catch (e) {
       dirty = true;
@@ -485,29 +488,38 @@
     }
     backingUp = false;
   }
-  if (!freshDevice && !state.submittedAt && Object.keys(A).length) dirty = true;   // progress from before autosave existed gets backed up too
+  if (!freshDevice && !state.submittedAt && hasAnswers(A)) dirty = true;   // progress from before autosave existed gets backed up too
   setTimeout(() => backup(0), 5000);
   setInterval(() => backup(0), 60000);
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState !== "hidden" || !dirty || !C.endpoint || !Object.keys(A).length) return;
+    if (document.visibilityState !== "hidden" || !dirty || syncing || !C.endpoint || !hasAnswers(A)) return;
     try {   // keepalive lets the request finish after the tab is hidden or closed
       fetch(C.endpoint.replace(/\/$/, "") + "/draft", { method: "POST", keepalive: true, headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ me, k: key, part, pilot, answers: cleanAnswers(), meta: { startedAt: state.startedAt, savedAt: new Date().toISOString(), version: VERSION } }) });
-      dirty = false;
+        body: JSON.stringify({ me, k: key, part, pilot, answers: cleanAnswers(), meta: { startedAt: state.startedAt, savedAt: (state.lastSentAt = new Date().toISOString()), version: VERSION } }) });
+      dirty = false; saveLocal();
     } catch {}
   });
   render();
-  // Opening the link on a new device: bring back what they already submitted.
-  if (freshDevice && C.endpoint) {
+  // Every time the link opens: compare with the copy saved in the cloud (last submission or autosave)
+  // and use it if this device has nothing yet, or if the cloud copy is newer than this device's.
+  if (C.endpoint) {
     post("/load", {}).then(res => {
-      if (!res.found || !res.answers || Object.keys(A).length) return;
+      if (!res.found || !hasAnswers(res.answers)) return;
+      if (res.sentAt && res.sentAt === state.lastSentAt) return;   // the cloud copy is this device's own last save
+      const cloudAt = Date.parse(res.receivedAt || 0) || 0;
+      const localAt = Date.parse(state.changedAt || 0) || 0;
+      const useCloud = !hasAnswers(A) || (localAt && cloudAt > localAt);
+      if (!useCloud) return;
+      if (hasAnswers(A)) { try { localStorage.setItem(SKEY + ":before-restore", JSON.stringify(state)); } catch {} }
+      Object.keys(A).forEach(k => delete A[k]);
       Object.assign(A, res.answers);
       state.submittedAt = res.submittedAt || state.submittedAt;
-      render();
-      const note = h("p", { class: "restored" }, res.fromDraft
+      state.changedAt = new Date(cloudAt || Date.now()).toISOString();
+      dirty = false; saveLocal(); render();
+      showCloud("Loaded from cloud");
+      main.prepend(h("p", { class: "restored" }, res.fromDraft
         ? "We've loaded your saved progress. Pick up where you left off, and press Submit at the end."
-        : "We've loaded the answers you already sent. Pick up where you left off, then submit again to save changes.");
-      main.prepend(note);
-    }).catch(() => {});
+        : "We've loaded the answers you already sent. Pick up where you left off, then submit again to save changes."));
+    }).catch(() => {}).finally(() => { syncing = false; });
   }
 })();

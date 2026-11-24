@@ -108,7 +108,7 @@ export default {
         const t = d => Date.parse(d?.meta?.receivedAt || 0) || 0;
         const best = sub && (!dft || t(sub) >= t(dft)) ? sub : dft;
         if (!best) return json({ found: false }, 200, headers);
-        return json({ found: true, answers: best.answers, submittedAt: sub?.meta?.submittedAt, fromDraft: best === dft }, 200, headers);
+        return json({ found: true, answers: best.answers, submittedAt: sub?.meta?.submittedAt, receivedAt: best.meta?.receivedAt, sentAt: best.meta?.savedAt || best.meta?.submittedAt, fromDraft: best === dft }, 200, headers);
       }
       if (route === "/media") {
         const id = String(body.id || "");
